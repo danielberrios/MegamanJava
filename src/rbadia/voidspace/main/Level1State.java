@@ -97,6 +97,7 @@ public class Level1State extends LevelState {
 	@Override
 	public void doStart() {	
 
+		
 		setStartState(START_STATE);
 		setCurrentState(getStartState());
 		// init game variables
@@ -114,7 +115,8 @@ public class Level1State extends LevelState {
 		newFloor(this, 9);
 		newPlatforms(getNumPlatforms());
 		newAsteroid(this);
-
+		megaMan.setDirection(1); // MegaMan starts on the rightside
+		
 		lastAsteroidTime = -NEW_ASTEROID_DELAY;
 		lastLifeTime = -NEW_MEGAMAN_DELAY;
 
@@ -161,6 +163,9 @@ public class Level1State extends LevelState {
 
 	@Override
 	public void doPlaying() {
+		if (this.getInputHandler().isIPressed()) {			
+			this.getGameStatus().setLivesLeft(this.getGameStatus().getLivesLeft() + 1); //adds +1 to the current lives
+		}
 		setCurrentState(PLAYING);
 		updateScreen();
 	};
@@ -338,20 +343,40 @@ public class Level1State extends LevelState {
 		//draw one of three possible MegaMan poses according to situation
 		Graphics2D g2d = getGraphics2D();
 		GameStatus status = getGameStatus();
-		if(!status.isNewMegaMan()){
-			if((Gravity() == true) || ((Gravity() == true) && (Fire() == true || Fire2() == true))){
-				getGraphicsManager().drawMegaFallR(megaMan, g2d, this);
+		if (megaMan.getDirection() > 0) {		
+
+			if(!status.isNewMegaMan()){
+				if((Gravity() == true) || ((Gravity() == true) && (Fire() == true || Fire2() == true))){
+					getGraphicsManager().drawMegaFallR(megaMan, g2d, this);
+				}
+			}
+
+			if((Fire() == true || Fire2()== true) && (Gravity()==false)){
+				getGraphicsManager().drawMegaFireR(megaMan, g2d, this);
+			}
+
+			if((Gravity()==false) && (Fire()==false) && (Fire2()==false)){
+				getGraphicsManager().drawMegaMan(megaMan, g2d, this);
 			}
 		}
+		
+		else {
+			if(!status.isNewMegaMan()){
+				if((Gravity() == true) || ((Gravity() == true) && (Fire() == true || Fire2() == true))){
+					getGraphicsManager().drawMegaFallL(megaMan, g2d, this);
+				}
+			}
 
-		if((Fire() == true || Fire2()== true) && (Gravity()==false)){
-			getGraphicsManager().drawMegaFireR(megaMan, g2d, this);
-		}
+			if((Fire() == true || Fire2()== true) && (Gravity()==false)){
+				getGraphicsManager().drawMegaFireL(megaMan, g2d, this);
+			}
 
-		if((Gravity()==false) && (Fire()==false) && (Fire2()==false)){
-			getGraphicsManager().drawMegaMan(megaMan, g2d, this);
+			if((Gravity()==false) && (Fire()==false) && (Fire2()==false)){
+				getGraphicsManager().drawReverseMegaMan(megaMan, g2d, this);
+			}
 		}
 	}
+	
 
 	protected void drawPlatforms() {
 		//draw platforms
@@ -582,7 +607,9 @@ public class Level1State extends LevelState {
 	 * Move the megaMan left
 	 * @param megaMan the megaMan
 	 */
+	
 	public void moveMegaManLeft(){
+		megaMan.setDirection(-1);
 		if(megaMan.getX() - megaMan.getSpeed() >= 0){
 			megaMan.translate(-megaMan.getSpeed(), 0);
 		}
@@ -593,6 +620,7 @@ public class Level1State extends LevelState {
 	 * @param megaMan the megaMan
 	 */
 	public void moveMegaManRight(){
+		megaMan.setDirection(1);
 		if(megaMan.getX() + megaMan.getSpeed() + megaMan.width < getWidth()){
 			megaMan.translate(megaMan.getSpeed(), 0);
 		}

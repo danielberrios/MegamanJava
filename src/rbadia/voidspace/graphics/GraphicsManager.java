@@ -34,7 +34,13 @@ public class GraphicsManager {
 	private BufferedImage asteroidExplosionImg;
 	private BufferedImage megaManExplosionImg;
 	private BufferedImage bigAsteroidExplosionImg;
-
+	
+	//New 
+	private BufferedImage reversemegaManImg; 
+	private BufferedImage megaFallLImg;
+	private BufferedImage megaFireLImg;
+	
+	
 	/**
 	 * Creates a new graphics manager and loads the game images.
 	 */
@@ -50,7 +56,11 @@ public class GraphicsManager {
 			this.asteroidExplosionImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/asteroidExplosion.png"));
 			this.bulletImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/bullet.png"));
 			this.bigBulletImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/bigBullet.png"));
-
+			//New
+			this.megaFallLImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaFallLeft.png"));
+			this.megaFireLImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaFireLeft.png"));
+			this.reversemegaManImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/reversemegaMan3.png"));
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "The graphic files are either corrupt or missing.",
 					"VoidSpace - Fatal Error", JOptionPane.ERROR_MESSAGE);
@@ -69,13 +79,25 @@ public class GraphicsManager {
 	public void drawMegaMan (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
 		g2d.drawImage(megaManImg, megaMan.x, megaMan.y, observer);	
 	}
+	//New
+	public void drawReverseMegaMan (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
+		g2d.drawImage(reversemegaManImg, megaMan.x, megaMan.y, observer);	
+	}
 
 	public void drawMegaFallR (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
 		g2d.drawImage(megaFallRImg, megaMan.x, megaMan.y, observer);	
 	}
+	//New
+	public void drawMegaFallL (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
+		g2d.drawImage(megaFallLImg, megaMan.x, megaMan.y, observer);	
+	}
 
 	public void drawMegaFireR (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
 		g2d.drawImage(megaFireRImg, megaMan.x, megaMan.y, observer);	
+	}
+	//New
+	public void drawMegaFireL(MegaMan megaMan, Graphics2D g2d, ImageObserver observer) {
+		g2d.drawImage(megaFireLImg, megaMan.x, megaMan.y, observer);
 	}
 
 	public void drawFloor (Floor floor, Graphics2D g2d, ImageObserver observer, int i){

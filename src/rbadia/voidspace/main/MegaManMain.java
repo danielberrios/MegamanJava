@@ -58,7 +58,7 @@ public class MegaManMain {
 			LevelState level2State = new Level2State(2, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
 			LevelState levels[] = { level1State, level2State };
 
-			String outcome = "CONGRATS!! YOU WON!!";
+			String outcome = "But did you really win?";
 			for (LevelState nextLevel : levels) {
 
 				System.out.println("Next Level Started");
@@ -76,7 +76,7 @@ public class MegaManMain {
 				nextLevelLoop.join();
 
 				if (nextLevel.getGameStatus().isGameOver()) {
-					outcome = "SORRY YOU LOST";
+					outcome = "You can defently do better than this";
 					break;
 				}
 
