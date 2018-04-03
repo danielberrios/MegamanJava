@@ -163,8 +163,11 @@ public class Level1State extends LevelState {
 
 	@Override
 	public void doPlaying() {
-		if (this.getInputHandler().isIPressed()) {			
-			this.getGameStatus().setLivesLeft(this.getGameStatus().getLivesLeft() + 1); //adds +1 to the current lives
+//		if (this.getInputHandler().isIPressed()) {			
+//			this.getGameStatus().setLivesLeft(this.getGameStatus().getLivesLeft() + 1); //adds +1 to the current lives
+//		}
+		if(this.getInputHandler().isRPressed()) {
+			levelAsteroidsDestroyed = 0;
 		}
 		setCurrentState(PLAYING);
 		updateScreen();

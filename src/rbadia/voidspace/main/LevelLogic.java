@@ -435,6 +435,13 @@ public class LevelLogic {
 		if(ih.isRightPressed()){
 			getLevelState().moveMegaManRight();
 		}
+		if(ih.isIPressed()) {
+			status.setLivesLeft(status.getLivesLeft()+1);
+		}
+//		if(ih.isRPressed()) {
+//			status.setAsteroidsDestroyed(0);
+//			
+//		}
 	}
 
 	public static void delay(long millis) {
