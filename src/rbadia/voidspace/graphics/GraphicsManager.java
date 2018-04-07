@@ -18,6 +18,7 @@ import rbadia.voidspace.model.Floor;
 //import rbadia.voidspace.model.BulletBoss2;
 import rbadia.voidspace.model.MegaMan;
 import rbadia.voidspace.model.Platform;
+import rbadia.voidspace.model.PowerUp;
 
 /**
  * Manages and draws game graphics and images.
@@ -39,6 +40,7 @@ public class GraphicsManager {
 	private BufferedImage reversemegaManImg; 
 	private BufferedImage megaFallLImg;
 	private BufferedImage megaFireLImg;
+	private BufferedImage powerUpImg;
 	
 	
 	/**
@@ -60,6 +62,7 @@ public class GraphicsManager {
 			this.megaFallLImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaFallLeft.png"));
 			this.megaFireLImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaFireLeft.png"));
 			this.reversemegaManImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/reversemegaMan3.png"));
+			this.powerUpImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/powerUp.png"));
 			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "The graphic files are either corrupt or missing.",
@@ -163,6 +166,11 @@ public class GraphicsManager {
 
 	public void drawBigAsteroidExplosion(Rectangle bigAsteroidExplosion, Graphics2D g2d, ImageObserver observer) {
 		g2d.drawImage(bigAsteroidExplosionImg, bigAsteroidExplosion.x, bigAsteroidExplosion.y, observer);
+	}
+	
+	//new
+	public void drawPowerUp(PowerUp powerUp, Graphics2D g2d, ImageObserver observer) {
+		g2d.drawImage(powerUpImg, powerUp.x, powerUp.y, observer);
 	}
 
 

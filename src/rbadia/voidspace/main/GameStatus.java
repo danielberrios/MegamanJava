@@ -18,6 +18,13 @@ public class GameStatus {
 	private int livesLeft;
 	private int level = 1;
 	
+	
+	
+	//new 
+	
+	
+	private boolean newPowerUp;
+	
 	public GameStatus(){
 		
 	}
@@ -89,6 +96,25 @@ public class GameStatus {
 	public synchronized void setNewAsteroid2(boolean newAsteroid2) {
 		this.newAsteroid2 = newAsteroid2;
 	}
+	
+	
+	
+	
+	// new
+	
+	public synchronized boolean isNewPowerUp() {
+		return newPowerUp;
+	}
+	public void setNewPowerUp(boolean newPowerUp) {
+		
+		this.newPowerUp = newPowerUp;
+		
+	}
+	
+	
+	
+	
+	
 	
 	/**
 	 * Indicates if a new big asteroid should be created/drawn.
