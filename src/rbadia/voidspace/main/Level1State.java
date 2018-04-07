@@ -57,7 +57,7 @@ public class Level1State extends LevelState {
 	protected Font bigFont;
 	protected Font biggestFont;
 
-	protected int levelAsteroidsDestroyed = 0;
+	protected int levelAsteroidsDestroyed = 0 ;
 
 	// Constructors
 	public Level1State(int level, MainFrame frame, GameStatus status, 
@@ -96,7 +96,6 @@ public class Level1State extends LevelState {
 
 	@Override
 	public void doStart() {	
-
 		
 		setStartState(START_STATE);
 		setCurrentState(getStartState());
