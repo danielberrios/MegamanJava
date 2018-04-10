@@ -13,6 +13,7 @@ import rbadia.voidspace.model.Asteroid;
 import rbadia.voidspace.model.BigBullet;
 //import rbadia.voidspace.model.Boss;
 import rbadia.voidspace.model.Bullet;
+import rbadia.voidspace.model.Farmer;
 import rbadia.voidspace.model.Floor;
 //import rbadia.voidspace.model.BulletBoss;
 //import rbadia.voidspace.model.BulletBoss2;
@@ -41,6 +42,7 @@ public class GraphicsManager {
 	private BufferedImage megaFallLImg;
 	private BufferedImage megaFireLImg;
 	private BufferedImage powerUpImg;
+	private BufferedImage farmerImg;
 	
 	
 	/**
@@ -63,6 +65,8 @@ public class GraphicsManager {
 			this.megaFireLImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaFireLeft.png"));
 			this.reversemegaManImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/reversemegaMan3.png"));
 			this.powerUpImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/powerUp.png"));
+			this.farmerImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/farmer.png"));
+			
 			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "The graphic files are either corrupt or missing.",
@@ -85,6 +89,11 @@ public class GraphicsManager {
 	//New
 	public void drawReverseMegaMan (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
 		g2d.drawImage(reversemegaManImg, megaMan.x, megaMan.y, observer);	
+	}
+	
+	//New
+	public void drawFarmer(Farmer farmeR, Graphics2D g2d, ImageObserver observer) {
+		g2d.drawImage(farmerImg, farmeR.x, farmeR.y, observer);
 	}
 
 	public void drawMegaFallR (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
