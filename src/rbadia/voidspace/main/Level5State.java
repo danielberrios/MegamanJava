@@ -119,6 +119,7 @@ public class Level5State extends Level1State {
 		this.getSoundManager().playBulletSound();
 	}
 
+	
 	//Checks if any farmer bullets hit megaman
 	public void checkFarmerManCollision() {
 		GameStatus status = getGameStatus (); 

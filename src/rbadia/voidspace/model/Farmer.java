@@ -5,8 +5,8 @@ public class Farmer extends GameObject {
 	private static final long serialVersionUID = 1L;
 	
 	public static final int DEFAULT_SPEED = 5; 
-	public static final int WIDTH = 45; 
-	public static final int HEIGHT = 60;
+	public static final int WIDTH = 50; 
+	public static final int HEIGHT = 50;
 	
 	public Farmer (int xPos, int yPos)
 	{
