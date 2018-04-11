@@ -1,8 +1,13 @@
 package rbadia.voidspace.main;
 
+import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import rbadia.voidspace.graphics.GraphicsManager;
 import rbadia.voidspace.model.Bullet;
@@ -21,11 +26,17 @@ public class Level5State extends Level1State {
 	//Getter
 	public Farmer getFarmer () {return farmeR;}
 	public List <Bullet> getfarmerBullets() {return farmerBullets; }
-	
+	public BufferedImage imgNew;
 	
 	public Level5State(int level, MainFrame frame, GameStatus status, LevelLogic gameLogic, InputHandler inputHandler,
 			GraphicsManager graphicsMan, SoundManager soundMan) {
 		super(level, frame, status, gameLogic, inputHandler, graphicsMan, soundMan);
+		try {
+			imgNew = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/farmbackground.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		}
 	}	
 	
 	
@@ -165,6 +176,10 @@ public class Level5State extends Level1State {
 		return platforms;
 	}
 
-	
+	//for background
+	protected void paintBackGround(Graphics farmbackground) {
+		super.paintComponent(farmbackground);
+		farmbackground.drawImage(imgNew, 0, 0, this);
+	}
 	
 }

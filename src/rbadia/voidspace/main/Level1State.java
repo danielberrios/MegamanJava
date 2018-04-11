@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
@@ -42,16 +43,17 @@ public class Level1State extends LevelState {
 	protected Floor[] floor;	
 	protected int numPlatforms=8;
 	protected Platform[] platforms;
-	
-	
-	
+
+
+
 	//new
 	protected PowerUp powerUp;
 	protected static final int NEW_POWERUP_DELAY = 1000;
 	protected long lastPowerTime;
 	protected Rectangle powerTake;
-	
-	
+	public BufferedImage imgNew;
+
+
 	protected int damage=0;
 	protected static final int NEW_MEGAMAN_DELAY = 500;
 	protected static final int NEW_ASTEROID_DELAY = 500;
@@ -87,6 +89,12 @@ public class Level1State extends LevelState {
 		backBuffer = new BufferedImage(500, 400, BufferedImage.TYPE_INT_RGB);
 		this.setGraphics2D(backBuffer.createGraphics());
 		rand = new Random();
+		try {
+			imgNew = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/cows.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		}
 	}
 
 	// Getters
@@ -97,17 +105,10 @@ public class Level1State extends LevelState {
 	public Asteroid getAsteroid() 				{ return asteroid; 		}
 	public List<Bullet> getBullets() 			{ return bullets; 		}
 	public List<BigBullet> getBigBullets()		{ return bigBullets;   	}
-	
-	
-	
-	
-	
 	//new
 	public PowerUp getPowerUp()					{ return powerUp;	}
 
-	
-	
-	
+
 	// Level state methods
 	// The method associated with the current level state will be called 
 	// repeatedly during each LevelLoop iteration until the next a state 
@@ -116,7 +117,7 @@ public class Level1State extends LevelState {
 
 	@Override
 	public void doStart() {	
-		
+
 		setStartState(START_STATE);
 		setCurrentState(getStartState());
 		// init game variables
@@ -135,17 +136,13 @@ public class Level1State extends LevelState {
 		newPlatforms(getNumPlatforms());
 		newAsteroid(this);
 		megaMan.setDirection(1); // MegaMan starts on the rightside
-		
-		
-		
-		
+
 		//new 
 		newPowerUp(this);
 		status.setNewPowerUp(false);
 		lastPowerTime= -NEW_POWERUP_DELAY;
-		
-		
-		
+
+
 		lastAsteroidTime = -NEW_ASTEROID_DELAY;
 		lastLifeTime = -NEW_MEGAMAN_DELAY;
 
@@ -192,9 +189,9 @@ public class Level1State extends LevelState {
 
 	@Override
 	public void doPlaying() {
-//		if (this.getInputHandler().isIPressed()) {			
-//			this.getGameStatus().setLivesLeft(this.getGameStatus().getLivesLeft() + 1); //adds +1 to the current lives
-//		}
+		//		if (this.getInputHandler().isIPressed()) {			
+		//			this.getGameStatus().setLivesLeft(this.getGameStatus().getLivesLeft() + 1); //adds +1 to the current lives
+		//		}
 		if(this.getInputHandler().isRPressed()) {
 			levelAsteroidsDestroyed = 0;
 		}
@@ -253,6 +250,7 @@ public class Level1State extends LevelState {
 
 		clearScreen();
 		drawStars(50);
+		paintBackGround(g2d);
 		drawFloor();
 		drawPlatforms();
 		drawMegaMan();
@@ -263,12 +261,13 @@ public class Level1State extends LevelState {
 		checkBigBulletAsteroidCollisions();
 		checkMegaManAsteroidCollisions();
 		checkAsteroidFloorCollisions();
-		
-		
+
+
+
 		// new
 		drawPowerUp();
 		checkMegaManPowerCollisions();
-		
+
 
 		// update asteroids destroyed (score) label  
 		getMainFrame().getDestroyedValueLabel().setText(Long.toString(status.getAsteroidsDestroyed()));
@@ -294,11 +293,10 @@ public class Level1State extends LevelState {
 			removeAsteroid(asteroid);
 		}
 	}
-	
-	
-	
+
+
+
 	// new
-	
 	protected void checkMegaManPowerCollisions() {
 		GameStatus status = getGameStatus();
 		if(powerUp.intersects(megaMan)){
@@ -388,11 +386,9 @@ public class Level1State extends LevelState {
 			}
 		}
 	}
-	
-	
-	// new
-	
-	
+
+
+	// new	
 	protected void drawPowerUp() {
 		Graphics2D g2d = getGraphics2D();
 		GameStatus status = getGameStatus();
@@ -410,12 +406,9 @@ public class Level1State extends LevelState {
 						(rand.nextInt((int) (this.getHeight() - powerUp.getPixelsTall() - 32))));
 			}
 		}
-		}
-	
-	
-	
-	
-	
+	}
+
+
 	protected void drawMegaMan() {
 		//draw one of three possible MegaMan poses according to situation
 		Graphics2D g2d = getGraphics2D();
@@ -436,7 +429,7 @@ public class Level1State extends LevelState {
 				getGraphicsManager().drawMegaMan(megaMan, g2d, this);
 			}
 		}
-		
+
 		else {
 			if(!status.isNewMegaMan()){
 				if((Gravity() == true) || ((Gravity() == true) && (Fire() == true || Fire2() == true))){
@@ -453,7 +446,7 @@ public class Level1State extends LevelState {
 			}
 		}
 	}
-	
+
 
 	protected void drawPlatforms() {
 		//draw platforms
@@ -570,10 +563,10 @@ public class Level1State extends LevelState {
 		// play asteroid explosion sound
 		this.getSoundManager().playAsteroidExplosionSound();
 	}
-	
-	
-	
-	
+
+
+
+
 	public void removePowerUp(PowerUp powerUp){
 		// "remove" asteroid
 		powerTake = new Rectangle(
@@ -675,25 +668,17 @@ public class Level1State extends LevelState {
 		asteroid = new Asteroid(xPos, yPos);
 		return asteroid;
 	}
-	
-	
+
+
 	// new
-	
-	
-	
-	
-	
-	
 	public PowerUp newPowerUp(Level1State screen){
 		int xPos = (int) (screen.getWidth() - PowerUp.WIDTH);
 		int yPos = rand.nextInt((int)(screen.getHeight() - PowerUp.HEIGHT- 32));
 		powerUp = new PowerUp(xPos, yPos);
 		return powerUp;
 	}
-	
-	
-	
-	
+
+
 
 	/**
 	 * Move the megaMan up
@@ -721,7 +706,7 @@ public class Level1State extends LevelState {
 	 * Move the megaMan left
 	 * @param megaMan the megaMan
 	 */
-	
+
 	public void moveMegaManLeft(){
 		megaMan.setDirection(-1);
 		if(megaMan.getX() - megaMan.getSpeed() >= 0){
@@ -747,4 +732,12 @@ public class Level1State extends LevelState {
 	public void slowDownMegaMan() {
 		megaMan.setSpeed(megaMan.getDefaultSpeed());
 	}
+
+
+	//for background
+	protected void paintBackGround(Graphics cows) {
+		super.paintComponent(cows);
+		cows.drawImage(imgNew, 0, 0, this);
+	}
+
 }

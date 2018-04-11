@@ -1,5 +1,10 @@
 package rbadia.voidspace.main;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import rbadia.voidspace.graphics.GraphicsManager;
 import rbadia.voidspace.model.Platform;
@@ -13,12 +18,19 @@ import rbadia.voidspace.sounds.SoundManager;
 public class Level2State extends Level1State {
 
 	private static final long serialVersionUID = -2094575762243216079L;
-
+	public BufferedImage imgNew;
+	
 	// Constructors
 	public Level2State(int level, MainFrame frame, GameStatus status, 
 			LevelLogic gameLogic, InputHandler inputHandler,
 			GraphicsManager graphicsMan, SoundManager soundMan) {
 		super(level, frame, status, gameLogic, inputHandler, graphicsMan, soundMan);
+		try {
+			imgNew = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/pigbackground.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		}
 	}
 
 	@Override
@@ -63,5 +75,11 @@ public class Level2State extends Level1State {
 			}
 		}
 		return platforms;
+	}
+	
+	//for backgorund
+	protected void paintBackGround(Graphics pigbackground) {
+		super.paintComponent(pigbackground);
+		pigbackground.drawImage(imgNew, 0, 0, this);
 	}
 }
