@@ -184,7 +184,7 @@ public class Level5State extends Level1State {
 	
 	@Override
 	public boolean isLevelWon() {
-		return levelAsteroidsDestroyed >= 12 || levelfarmerDestroyed == 10 || this.getInputHandler().isNPressed();
+		return  levelfarmerDestroyed == 15 || this.getInputHandler().isNPressed();
 	}
 	
 }

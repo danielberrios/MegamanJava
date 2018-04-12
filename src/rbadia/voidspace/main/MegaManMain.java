@@ -57,11 +57,11 @@ public class MegaManMain {
 			LevelState level1State = new Level1State(1, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
 			LevelState level2State = new Level2State(2, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
 			LevelState level3State = new Level3State(3, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
-			//LevelState level4State = new Level4State(4, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
+			LevelState level4State = new Level4State(4, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
 			LevelState level5State = new Level5State(5, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
-			LevelState levels[] = { level1State, level2State, level3State,level5State };
+			LevelState levels[] = { level1State, level2State, level3State, level4State, level5State };
 
-			String outcome = "But did you really win?";
+			String outcome = "Moo";
 			for (LevelState nextLevel : levels) {
 
 				System.out.println("Next Level Started");
@@ -79,7 +79,7 @@ public class MegaManMain {
 				nextLevelLoop.join();
 
 				if (nextLevel.getGameStatus().isGameOver()) {
-					outcome = "You can defently do better than this";
+					outcome = "Oink";
 					break;
 				}
 
