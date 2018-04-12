@@ -182,4 +182,9 @@ public class Level5State extends Level1State {
 		farmbackground.drawImage(imgNew, 0, 0, this);
 	}
 	
+	@Override
+	public boolean isLevelWon() {
+		return levelAsteroidsDestroyed >= 12 || levelfarmerDestroyed == 10 || this.getInputHandler().isNPressed();
+	}
+	
 }

@@ -82,4 +82,9 @@ public class Level2State extends Level1State {
 		super.paintComponent(pigbackground);
 		pigbackground.drawImage(imgNew, 0, 0, this);
 	}
+	
+	@Override
+	public boolean isLevelWon() {
+		return levelAsteroidsDestroyed >= 6  || this.getInputHandler().isNPressed();
+	}
 }

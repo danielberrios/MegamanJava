@@ -92,7 +92,10 @@ public class Level3State extends Level1State {
 		roosterbackground.drawImage(imgNew, 0, 0, this);
 	}
 
-	
+	@Override
+	public boolean isLevelWon() {
+		return levelAsteroidsDestroyed >= 9  || this.getInputHandler().isNPressed();
+	}
 }
 
 
