@@ -206,6 +206,7 @@ public class Level1State extends LevelState {
 
 	@Override
 	public void doLevelWon(){
+		MegaManMain.audioClip.stop();
 		setCurrentState(LEVEL_WON);
 		getGameLogic().drawYouWin();
 		repaint();
@@ -214,6 +215,7 @@ public class Level1State extends LevelState {
 
 	@Override
 	public void doGameOverScreen(){
+		MegaManMain.audioClip.stop();
 		setCurrentState(GAME_OVER_SCREEN);
 		getGameLogic().drawGameOver();
 		getMainFrame().getDestroyedValueLabel().setForeground(new Color(128, 0, 0));
