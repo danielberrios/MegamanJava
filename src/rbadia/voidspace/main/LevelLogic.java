@@ -442,10 +442,6 @@ public class LevelLogic {
 			status.setLivesLeft(status.getLivesLeft()+1);
 			}
 		}
-//		if(ih.isRPressed()) {
-//			status.setAsteroidsDestroyed(0);
-//			
-//		}
 	}
 
 	public static void delay(long millis) {
