@@ -84,6 +84,7 @@ public class Level3State extends Level1State {
 	}	
 	
 	
+	
 	public Asteroid secondAsteroid(Level3State screen) {
 		int xPos = (int) (screen.getWidth() - Asteroid.WIDTH);
 		int yPos = rand.nextInt((int)(screen.getHeight() - Asteroid.HEIGHT - 32));
