@@ -510,13 +510,13 @@ public class Level1State extends LevelState {
 		for(int i=0; i<bullets.size(); i++){
 			Bullet bullet = bullets.get(i);
 			if((bullet.getX() > megaMan.getX() + megaMan.getWidth()) && 
-					(bullet.getX() <= megaMan.getX() + megaMan.getWidth() + 60)){
+					(bullet.getX() <= megaMan.getX() + megaMan.getWidth() + 60)
+				|| ((bullet.getX() <= megaMan.getX() ) && (bullet.getX() > megaMan.getX() -  80))){
 				return true;
 			}
 		}
 		return false;
 	}
-
 	//BigBullet fire pose
 	protected boolean Fire2(){
 		MegaMan megaMan = this.getMegaMan();
@@ -584,13 +584,24 @@ public class Level1State extends LevelState {
 	 * Fire a bullet from life.
 	 */
 	public void fireBullet(){
-		Bullet bullet = new Bullet(megaMan.x + megaMan.width - Bullet.WIDTH/2,
+		int bullDir= 0;
+		Bullet bullet;
+		if(megaMan.getDirection()<=0) {
+			bullet = new Bullet(megaMan.x + megaMan.width - Bullet.WIDTH/2,
 				megaMan.y + megaMan.width/2 - Bullet.HEIGHT +2);
+		bullDir = -1;
+		
+		}
+		else {
+			bullet = new Bullet(megaMan.x + megaMan.width - Bullet.WIDTH/2,
+					megaMan.y + megaMan.width/2 - Bullet.HEIGHT -2);
+			bullDir = 1;
+		}
 		bullets.add(bullet);
+		bullet.setDirection(bullDir);
 		this.getSoundManager().playBulletSound();
 		
 	}
-
 	/**
 	 * Fire the "Power Shot" bullet
 	 */
@@ -621,14 +632,13 @@ public class Level1State extends LevelState {
 	 */
 	public boolean moveBullet(Bullet bullet){
 		if(bullet.getY() - bullet.getSpeed() >= 0){
-			bullet.translate(bullet.getSpeed(), 0);
+			bullet.translate(bullet.getSpeed()* bullet.getDirection(), 0);
 			return false;
 		}
 		else{
 			return true;
 		}
 	}
-
 	/** Move a "Power Shot" bullet once fired.
 	 * @param bigBullet the bullet to move
 	 * @return if the bullet should be removed from screen
