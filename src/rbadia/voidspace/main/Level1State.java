@@ -395,7 +395,7 @@ public class Level1State extends LevelState {
 		}
 		else {
 			long currentTime = System.currentTimeMillis();
-			if((currentTime - lastPowerTime) > NEW_POWERUP_DELAY){
+			if((currentTime - lastPowerTime) > NEW_POWERUP_DELAY*8){
 				// draw a new asteroid
 				lastPowerTime = currentTime;
 				status.setNewPowerUp(false);

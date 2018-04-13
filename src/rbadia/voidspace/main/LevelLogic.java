@@ -436,7 +436,11 @@ public class LevelLogic {
 			getLevelState().moveMegaManRight();
 		}
 		if(ih.isIPressed()) {
+			long Time= System.currentTimeMillis();
+			if(Time - lastExchangeTime > 500*2) {
+				lastExchangeTime = Time;
 			status.setLivesLeft(status.getLivesLeft()+1);
+			}
 		}
 //		if(ih.isRPressed()) {
 //			status.setAsteroidsDestroyed(0);
