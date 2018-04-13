@@ -31,7 +31,7 @@ public class Level2State extends Level1State {
 			GraphicsManager graphicsMan, SoundManager soundMan) {
 		super(level, frame, status, gameLogic, inputHandler, graphicsMan, soundMan);
 		try {
-			imgNew = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/ducks.png"));
+			imgNew = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/chicken.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 
@@ -85,9 +85,9 @@ public class Level2State extends Level1State {
 		
 	
 	//for backgorund
-	protected void paintBackGround(Graphics ducks) {
-		super.paintComponent(ducks);
-		ducks.drawImage(imgNew, 0, 0, this);
+	protected void paintBackGround(Graphics chicken) {
+		super.paintComponent(chicken);
+		chicken.drawImage(imgNew, 0, 0, this);
 	}
 	
 	@Override

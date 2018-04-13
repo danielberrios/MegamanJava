@@ -43,16 +43,16 @@ public class Level4State extends Level3State {
 	
 
 	@Override
-	public Platform[] newPlatforms(int n) {
+	public Platform[] newPlatforms(int n){
 		platforms = new Platform[n];
-		for(int i = 0; i < n; i++){
+		for(int i=0; i<n; i++){
 			this.platforms[i] = new Platform(0,0);
-			if(i < 4)  platforms[i].setLocation(50 +i*70, getHeight()/2 + 250 - 3*40);
-			if(i == 4) platforms[i].setLocation(50 + i * 50, getHeight()/2 + 140 - i * 14);
-			if(i > 4){	
-				int k = 4;
-				platforms[i].setLocation(50 + i * 50, getHeight()/2 + 20 + (i - k) * 20 );
-				k = k + 2;
+			if(i<4)	platforms[i].setLocation(50+ i*50, getHeight()/2 + 140 - i*40);
+			if(i==4) platforms[i].setLocation(50 +i*50, getHeight()/2 + 140 - 3*40);
+			if(i>4){	
+				int k=4;
+				platforms[i].setLocation(50 + i*50, getHeight()/2 + 20 + (i-k)*40 );
+				k=k+2;
 			}
 		}
 		return platforms;

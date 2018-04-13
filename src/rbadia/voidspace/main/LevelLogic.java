@@ -220,7 +220,7 @@ public class LevelLogic {
 			this.bigFont = originalFont;
 		}
 
-		String gameTitleStr = "MegaMan !!!";
+		String gameTitleStr = "MegaMan!!";
 
 		Font currentFont = biggestFont == null? bigFont : biggestFont;
 		float fontSize = currentFont.getSize2D();
@@ -237,7 +237,7 @@ public class LevelLogic {
 		int ascent = fm.getAscent();
 		int strX = (levelState.getWidth() - strWidth)/2;
 		int strY = (levelState.getHeight() + ascent)/2 - ascent;
-		g2d.setPaint(Color.YELLOW);
+		g2d.setPaint(Color.GREEN);
 		g2d.drawString(gameTitleStr, strX, strY);
 
 		g2d.setFont(originalFont);
