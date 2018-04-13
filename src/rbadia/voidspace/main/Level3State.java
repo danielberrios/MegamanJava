@@ -10,12 +10,19 @@ import javax.imageio.ImageIO;
 
 import rbadia.voidspace.graphics.GraphicsManager;
 import rbadia.voidspace.model.Asteroid;
+import rbadia.voidspace.model.BigBullet;
+import rbadia.voidspace.model.Bullet;
 import rbadia.voidspace.model.Platform;
 import rbadia.voidspace.sounds.SoundManager;
 
 public class Level3State extends Level1State {
 	
 	public BufferedImage imgNew;
+	protected Asteroid asteroidNum2;
+	protected long lastAsteroidTimeNum2;
+	
+	//Getter
+	public Asteroid getAsteroidNum2() {return asteroidNum2; }
 	
 	public Level3State(int level, MainFrame frame, GameStatus status, LevelLogic gameLogic, InputHandler inputHandler,
 			GraphicsManager graphicsMan, SoundManager soundMan) {
@@ -41,7 +48,9 @@ public class Level3State extends Level1State {
 
 	@Override
 	public void doStart() {
-		super.doStart();			
+		super.doStart();	
+		secondAsteroid(this);
+		lastAsteroidTimeNum2 = -NEW_ASTEROID_DELAY;
 		setStartState(GETTING_READY);
 		setCurrentState(getStartState());
 	}
@@ -60,13 +69,119 @@ public class Level3State extends Level1State {
 				asteroid.setLocation(this.getWidth() - asteroid.getPixelsWide(),
 						rand.nextInt(this.getHeight() - asteroid.getPixelsTall() - 32));
 			}
-			else {
-				// draw explosion
-				getGraphicsManager().drawAsteroidExplosion(asteroidExplosion, g2d, this);
+		}
+		if((asteroidNum2.getX() + asteroidNum2.getPixelsWide() >  0)) {
+			asteroidNum2.translate(-asteroidNum2.getSpeed(), asteroidNum2.getSpeed()/2);
+			getGraphicsManager().drawAsteroid(asteroidNum2, g2d, this);	
+		}
+		else {
+			long currentTime = System.currentTimeMillis();
+			if((currentTime - lastAsteroidTimeNum2) > NEW_ASTEROID_DELAY){
+				asteroidNum2.setLocation(this.getWidth() - asteroidNum2.getPixelsWide(),
+						rand.nextInt(this.getHeight() - asteroidNum2.getPixelsTall() - 32));
 			}
-		}	
+		}
+	}	
+	
+	
+	public Asteroid secondAsteroid(Level3State screen) {
+		int xPos = (int) (screen.getWidth() - Asteroid.WIDTH);
+		int yPos = rand.nextInt((int)(screen.getHeight() - Asteroid.HEIGHT - 32));
+		asteroidNum2 = new Asteroid(xPos, yPos);
+		return asteroidNum2;
+		
+	}
+	
+	public void removeAsteroidNum2(Asteroid asteroid){		
+		Graphics2D g2d = getGraphics2D();
+		asteroidExplosion = new Rectangle(
+				asteroid.x,
+				asteroid.y,
+				asteroid.getPixelsWide(),
+				asteroid.getPixelsTall());
+		asteroid.setLocation(-asteroid.getPixelsWide(), -asteroid.getPixelsTall());
+		this.getGameStatus().setNewAsteroid(true);
+		lastAsteroidTimeNum2 = System.currentTimeMillis();
+		this.getGraphicsManager().drawAsteroidExplosion(asteroidExplosion, g2d, this);
+		// play asteroid explosion sound
+		this.getSoundManager().playAsteroidExplosionSound();
 	}
 
+	
+	@Override
+	protected void checkAsteroidFloorCollisions() {
+		for(int i=0; i<9; i++){
+			if(asteroid.intersects(floor[i])){
+				removeAsteroid(asteroid);
+			}
+			if(asteroidNum2.intersects(floor[i])){
+				removeAsteroidNum2(asteroidNum2);
+			}
+		}
+	}
+	
+	@Override
+	protected void checkMegaManAsteroidCollisions() {
+		GameStatus status = getGameStatus();
+		if(asteroid.intersects(megaMan)){
+			status.setLivesLeft(status.getLivesLeft() - 1);
+			removeAsteroid(asteroid);
+		}
+		if(asteroidNum2.intersects(megaMan)){
+			status.setLivesLeft(status.getLivesLeft() - 1);
+			removeAsteroidNum2(asteroidNum2);
+		}
+	}
+	
+	
+	@Override
+	protected void checkBigBulletAsteroidCollisions() {
+		GameStatus status = getGameStatus();
+		for(int i=0; i<bigBullets.size(); i++){
+			BigBullet bigBullet = bigBullets.get(i);
+			if(asteroid.intersects(bigBullet)){
+				// increase asteroids destroyed count
+				status.setAsteroidsDestroyed(status.getAsteroidsDestroyed() + 100);
+				removeAsteroid(asteroid);
+				damage=0;
+			}
+			if(asteroidNum2.intersects(bigBullet)){
+				// increase asteroids destroyed count
+				status.setAsteroidsDestroyed(status.getAsteroidsDestroyed() + 100);
+				removeAsteroidNum2(asteroidNum2);
+				damage=0;
+			}
+		}
+	}
+	
+	@Override
+	protected void checkBullletAsteroidCollisions() {
+		GameStatus status = getGameStatus();
+		for(int i=0; i<bullets.size(); i++){
+			Bullet bullet = bullets.get(i);
+			if(asteroid.intersects(bullet)){
+				// increase asteroids destroyed count
+				status.setAsteroidsDestroyed(status.getAsteroidsDestroyed() + 100);
+				removeAsteroid(asteroid);
+				levelAsteroidsDestroyed++;
+				damage=0;
+				// remove bullet
+				bullets.remove(i);
+				break;
+			}
+			if(asteroidNum2.intersects(bullet)){
+				// increase asteroids destroyed count
+				status.setAsteroidsDestroyed(status.getAsteroidsDestroyed() + 100);
+				removeAsteroidNum2(asteroidNum2);
+				levelAsteroidsDestroyed++;
+				damage=0;
+				// remove bullet
+				bullets.remove(i);
+				break;
+			}
+		}
+	}
+	
 	@Override
 	public Platform[] newPlatforms(int n) {
 		platforms = new Platform[n];

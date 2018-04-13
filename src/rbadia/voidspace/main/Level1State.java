@@ -188,10 +188,7 @@ public class Level1State extends LevelState {
 	};
 
 	@Override
-	public void doPlaying() {
-		//		if (this.getInputHandler().isIPressed()) {			
-		//			this.getGameStatus().setLivesLeft(this.getGameStatus().getLivesLeft() + 1); //adds +1 to the current lives
-		//		}
+	public void doPlaying() {		
 		if(this.getInputHandler().isRPressed()) {
 			levelAsteroidsDestroyed = 0;
 		}
@@ -263,8 +260,6 @@ public class Level1State extends LevelState {
 		checkBigBulletAsteroidCollisions();
 		checkMegaManAsteroidCollisions();
 		checkAsteroidFloorCollisions();
-
-
 
 		// new
 		drawPowerUp();
@@ -528,8 +523,9 @@ public class Level1State extends LevelState {
 		List<BigBullet> bigBullets = this.getBigBullets();
 		for(int i=0; i<bigBullets.size(); i++){
 			BigBullet bigBullet = bigBullets.get(i);
-			if((bigBullet.getX() > megaMan.getX() + megaMan.getWidth()) && 
-					(bigBullet.getX() <= megaMan.getX() + megaMan.getWidth() + 60)){
+			if(((bigBullet.getX() > megaMan.getX() + megaMan.getWidth()) && (bigBullet.getX() <= megaMan.getX() + megaMan.getWidth() + 60))
+					//new
+					|| ((bigBullet.getX() <= megaMan.getX() ) && (bigBullet.getX() > megaMan.getX() -  80))){
 				return true;
 			}
 		}
@@ -592,6 +588,7 @@ public class Level1State extends LevelState {
 				megaMan.y + megaMan.width/2 - Bullet.HEIGHT +2);
 		bullets.add(bullet);
 		this.getSoundManager().playBulletSound();
+		
 	}
 
 	/**
@@ -599,11 +596,22 @@ public class Level1State extends LevelState {
 	 */
 	public void fireBigBullet(){
 		//BigBullet bigBullet = new BigBullet(megaMan);
-		int xPos = megaMan.x + megaMan.width - BigBullet.WIDTH / 2;
-		int yPos = megaMan.y + megaMan.width/2 - BigBullet.HEIGHT + 4;
-		BigBullet  bigBullet = new BigBullet(xPos, yPos);
+		BigBullet bigBullet;
+		int DirectionbigBullet = 0;
+		if(megaMan.getDirection() <= 0) {
+			bigBullet = new BigBullet(megaMan.x + megaMan.width - BigBullet.WIDTH / 2,
+					megaMan.y + megaMan.width - BigBullet.HEIGHT - 2);
+			DirectionbigBullet = -1;
+		}
+		else {
+			bigBullet = new BigBullet(megaMan.x + megaMan.width - BigBullet.WIDTH / 2,
+					megaMan.y + megaMan.width - BigBullet.HEIGHT - 2);
+			DirectionbigBullet = 1;
+		}
 		bigBullets.add(bigBullet);
+		bigBullet.setDirection(DirectionbigBullet);
 		this.getSoundManager().playBulletSound();
+
 	}
 
 	/**
@@ -627,7 +635,7 @@ public class Level1State extends LevelState {
 	 */
 	public boolean moveBigBullet(BigBullet bigBullet){
 		if(bigBullet.getY() - bigBullet.getSpeed() >= 0){
-			bigBullet.translate(bigBullet.getSpeed(), 0);
+			bigBullet.translate(bigBullet.getSpeed()* bigBullet.getDirection(), 0);
 			return false;
 		}
 		else{
@@ -709,10 +717,10 @@ public class Level1State extends LevelState {
 	 * @param megaMan the megaMan
 	 */
 
-	public void moveMegaManLeft(){
-		megaMan.setDirection(-1);
+	public void moveMegaManLeft(){		
 		if(megaMan.getX() - megaMan.getSpeed() >= 0){
 			megaMan.translate(-megaMan.getSpeed(), 0);
+		    megaMan.setDirection(-1);	
 		}
 	}
 

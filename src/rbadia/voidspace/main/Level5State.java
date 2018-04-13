@@ -2,6 +2,7 @@ package rbadia.voidspace.main;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,20 +11,25 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import rbadia.voidspace.graphics.GraphicsManager;
+import rbadia.voidspace.model.Asteroid;
+import rbadia.voidspace.model.BigBullet;
 import rbadia.voidspace.model.Bullet;
 import rbadia.voidspace.model.Farmer;
 import rbadia.voidspace.model.Platform;
 import rbadia.voidspace.sounds.SoundManager;
 
-public class Level5State extends Level1State {
+public class Level5State extends Level4State {
 	
 	private static final long serialVersionUID = 1L;
 	protected Farmer farmeR;
 	protected List<Bullet>farmerBullets;
 	public int levelfarmerDestroyed = 0;
 	protected long lastFarmerBulletTime = 0;
+	protected Asteroid asteroidNum4;
+	protected long lastAsteroidTimeNum4;
 	
 	//Getter
+	public Asteroid getAsteroidNum4() {return asteroidNum4; }
 	public Farmer getFarmer () {return farmeR;}
 	public List <Bullet> getfarmerBullets() {return farmerBullets; }
 	public BufferedImage imgNew;
@@ -43,11 +49,14 @@ public class Level5State extends Level1State {
 	@Override
 	public void doStart() {	
 		super.doStart();
+		fourthAsteroid(this);
+		lastAsteroidTimeNum4 = -NEW_ASTEROID_DELAY;
 		setStartState(GETTING_READY);
 		setCurrentState(getStartState());
 		farmerBullets = new ArrayList<Bullet>();
 		newFarmer();
 	}
+	
 	
 	@Override
 	public void updateScreen(){
@@ -59,27 +68,200 @@ public class Level5State extends Level1State {
 		
 	}
 	
+	public Asteroid fourthAsteroid(Level5State screen) {
+		int xPos = (int) (screen.getWidth() - Asteroid.WIDTH);
+		int yPos = rand.nextInt((int)(screen.getHeight() - Asteroid.HEIGHT - 32));
+		asteroidNum4 = new Asteroid(xPos, yPos);
+		return asteroidNum4;
+		
+	}
+	
 	@Override
 	protected void drawAsteroid() {
 		Graphics2D g2d = getGraphics2D();
 		if((asteroid.getX() + asteroid.getPixelsWide() >  0)) {
-			asteroid.translate(-asteroid.getSpeed(), asteroid.getSpeed()/2);
+			asteroid.translate(-asteroid.getSpeed(), 0);
 			getGraphicsManager().drawAsteroid(asteroid, g2d, this);	
 		}
 		else {
 			long currentTime = System.currentTimeMillis();
 			if((currentTime - lastAsteroidTime) > NEW_ASTEROID_DELAY){
-
 				asteroid.setLocation(this.getWidth() - asteroid.getPixelsWide(),
 						rand.nextInt(this.getHeight() - asteroid.getPixelsTall() - 32));
 			}
-			else {
-				// draw explosion
-				getGraphicsManager().drawAsteroidExplosion(asteroidExplosion, g2d, this);
+		}
+		if((asteroidNum2.getX() + asteroidNum2.getPixelsWide() >  0)) {
+			asteroidNum2.translate(-asteroidNum2.getSpeed(), asteroidNum2.getSpeed()/2);
+			getGraphicsManager().drawAsteroid(asteroidNum2, g2d, this);	
+		}
+		else {
+			long currentTime = System.currentTimeMillis();
+			if((currentTime - lastAsteroidTimeNum2) > NEW_ASTEROID_DELAY){
+				asteroidNum2.setLocation(this.getWidth() - asteroidNum2.getPixelsWide(),
+						rand.nextInt(this.getHeight() - asteroidNum2.getPixelsTall() - 32));
+			}
+		}
+		if(asteroidNum3.getX() + asteroidNum3.getPixelsWide() > 0) {
+			asteroidNum3.translate(-4, 0);
+			getGraphicsManager().drawAsteroid(asteroidNum3, g2d, this); 
+		}
+		else {
+			long currentTime = System.currentTimeMillis();
+			if((currentTime - lastAsteroidTimeNum3) > NEW_ASTEROID_DELAY){
+				// draw a new asteroid
+				lastAsteroidTimeNum3 = currentTime;
+				asteroidNum3.setLocation((int) (this.getWidth() - asteroidNum3.getPixelsWide()),
+						(rand.nextInt((int) (this.getHeight() - asteroidNum3.getPixelsTall() - 32))));
+			}
+		}
+		if(asteroidNum4.getX() + asteroidNum4.getPixelsWide() >  0) {
+			asteroidNum4.translate(4, 5);
+			getGraphicsManager().drawAsteroid(asteroidNum4, g2d, this);	
+		}
+		else {
+			long currentTime = System.currentTimeMillis();
+			if((currentTime - lastAsteroidTimeNum4) > NEW_ASTEROID_DELAY){
+				asteroidNum4.setLocation(this.getWidth() - asteroidNum4.getPixelsWide(),
+						rand.nextInt(this.getHeight() - asteroidNum4.getPixelsTall() - 32));
 			}
 		}	
 	}
 		
+	
+	public void removeAsteroidNum4(Asteroid asteroid){		
+		Graphics2D g2d = getGraphics2D();
+		asteroidExplosion = new Rectangle(
+				asteroid.x,
+				asteroid.y,
+				asteroid.getPixelsWide(),
+				asteroid.getPixelsTall());
+		asteroid.setLocation(-asteroid.getPixelsWide(), -asteroid.getPixelsTall());
+		this.getGameStatus().setNewAsteroid(true);
+		lastAsteroidTimeNum4 = System.currentTimeMillis();
+		this.getGraphicsManager().drawAsteroidExplosion(asteroidExplosion, g2d, this);
+		// play asteroid explosion sound
+		this.getSoundManager().playAsteroidExplosionSound();
+	}
+	
+	
+	@Override
+	protected void checkAsteroidFloorCollisions() {
+		for(int i=0; i<9; i++){
+			if(asteroid.intersects(floor[i])){
+				removeAsteroid(asteroid);
+			}
+			if(asteroidNum2.intersects(floor[i])){
+				removeAsteroidNum2(asteroidNum2);
+			}
+			if(asteroidNum3.intersects(floor[i])){
+				removeAsteroidNum3(asteroidNum3);
+			}
+			if(asteroidNum4.intersects(floor[i])){
+				removeAsteroidNum4(asteroidNum4);
+			}
+		}
+	}
+	
+	@Override
+	protected void checkMegaManAsteroidCollisions() {
+		GameStatus status = getGameStatus();
+		if(asteroid.intersects(megaMan)){
+			status.setLivesLeft(status.getLivesLeft() - 1);
+			removeAsteroid(asteroid);
+		}
+		if(asteroidNum2.intersects(megaMan)){
+			status.setLivesLeft(status.getLivesLeft() - 1);
+			removeAsteroidNum2(asteroidNum2);
+		}
+		if(asteroidNum3.intersects(megaMan)){
+			status.setLivesLeft(status.getLivesLeft() - 1);
+			removeAsteroidNum3(asteroidNum3);
+		}
+		if(asteroidNum4.intersects(megaMan)){
+			status.setLivesLeft(status.getLivesLeft() - 1);
+			removeAsteroidNum4(asteroidNum4);
+		}
+	}
+	
+	@Override
+	protected void checkBigBulletAsteroidCollisions() {
+		GameStatus status = getGameStatus();
+		for(int i=0; i<bigBullets.size(); i++){
+			BigBullet bigBullet = bigBullets.get(i);
+			if(asteroid.intersects(bigBullet)){
+				// increase asteroids destroyed count
+				status.setAsteroidsDestroyed(status.getAsteroidsDestroyed() + 100);
+				removeAsteroid(asteroid);
+				damage=0;
+			}
+			if(asteroidNum2.intersects(bigBullet)){
+				// increase asteroids destroyed count
+				status.setAsteroidsDestroyed(status.getAsteroidsDestroyed() + 100);
+				removeAsteroidNum2(asteroidNum2);
+				damage=0;
+			}
+			if(asteroidNum3.intersects(bigBullet)){
+				// increase asteroids destroyed count
+				status.setAsteroidsDestroyed(status.getAsteroidsDestroyed() + 100);
+				removeAsteroidNum3(asteroidNum3);
+				damage=0;
+			}
+			if(asteroidNum4.intersects(bigBullet)){
+				// increase asteroids destroyed count
+				status.setAsteroidsDestroyed(status.getAsteroidsDestroyed() + 100);
+				removeAsteroidNum4(asteroidNum4);
+				damage=0;
+			}
+		}
+	}
+	
+	@Override
+	protected void checkBullletAsteroidCollisions() {
+		GameStatus status = getGameStatus();
+		for(int i=0; i<bullets.size(); i++){
+			Bullet bullet = bullets.get(i);
+			if(asteroid.intersects(bullet)){
+				// increase asteroids destroyed count
+				status.setAsteroidsDestroyed(status.getAsteroidsDestroyed() + 100);
+				removeAsteroid(asteroid);
+				levelAsteroidsDestroyed++;
+				damage=0;
+				// remove bullet
+				bullets.remove(i);
+				break;
+			}
+			if(asteroidNum2.intersects(bullet)){
+				// increase asteroids destroyed count
+				status.setAsteroidsDestroyed(status.getAsteroidsDestroyed() + 100);
+				removeAsteroidNum2(asteroidNum2);
+				levelAsteroidsDestroyed++;
+				damage=0;
+				// remove bullet
+				bullets.remove(i);
+				break;
+			}
+			if(asteroidNum3.intersects(bullet)){
+				// increase asteroids destroyed count
+				status.setAsteroidsDestroyed(status.getAsteroidsDestroyed() + 100);
+				removeAsteroidNum3(asteroidNum3);
+				levelAsteroidsDestroyed++;
+				damage=0;
+				// remove bullet
+				bullets.remove(i);
+				break;
+			}
+			if(asteroidNum4.intersects(bullet)){
+				// increase asteroids destroyed count
+				status.setAsteroidsDestroyed(status.getAsteroidsDestroyed() + 100);
+				removeAsteroidNum4(asteroidNum4);
+				levelAsteroidsDestroyed++;
+				damage=0;
+				// remove bullet
+				bullets.remove(i);
+				break;
+			}
+		}
+	}
 	
 	public Farmer newFarmer() {
 		this.farmeR = new Farmer(getWidth()-50, 340);
@@ -184,7 +366,7 @@ public class Level5State extends Level1State {
 	
 	@Override
 	public boolean isLevelWon() {
-		return  levelfarmerDestroyed == 15 || this.getInputHandler().isNPressed();
+		return levelAsteroidsDestroyed >= 18 ||  levelfarmerDestroyed == 15 || this.getInputHandler().isNPressed();
 	}
 	
 }

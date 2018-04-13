@@ -1,12 +1,16 @@
 package rbadia.voidspace.main;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 import rbadia.voidspace.graphics.GraphicsManager;
+import rbadia.voidspace.model.Asteroid;
+import rbadia.voidspace.model.BigBullet;
+import rbadia.voidspace.model.Bullet;
 import rbadia.voidspace.model.Platform;
 import rbadia.voidspace.sounds.SoundManager;
 
@@ -20,6 +24,7 @@ public class Level2State extends Level1State {
 	private static final long serialVersionUID = -2094575762243216079L;
 	public BufferedImage imgNew;
 	
+		
 	// Constructors
 	public Level2State(int level, MainFrame frame, GameStatus status, 
 			LevelLogic gameLogic, InputHandler inputHandler,
@@ -35,7 +40,7 @@ public class Level2State extends Level1State {
 
 	@Override
 	public void doStart() {	
-		super.doStart();
+		super.doStart();		
 		setStartState(GETTING_READY);
 		setCurrentState(getStartState());
 	}
@@ -60,6 +65,7 @@ public class Level2State extends Level1State {
 			}
 		}	
 	}
+	
 
 	@Override
 	public Platform[] newPlatforms(int n){
@@ -76,6 +82,7 @@ public class Level2State extends Level1State {
 		}
 		return platforms;
 	}
+		
 	
 	//for backgorund
 	protected void paintBackGround(Graphics pigbackground) {

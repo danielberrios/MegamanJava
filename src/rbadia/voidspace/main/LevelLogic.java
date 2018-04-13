@@ -169,7 +169,7 @@ public class LevelLogic {
 		int strX = (levelState.getWidth() - strWidth)/2;
 		int strY = (levelState.getHeight() + ascent)/2;
 		g2d.setFont(bigFont);
-		g2d.setPaint(Color.RED);
+		g2d.setPaint(Color.BLUE);
 		g2d.drawString(gameOverStr, strX, strY);
 	}
 
