@@ -20,11 +20,9 @@ public class GameStatus {
 	
 	
 	
-	//new 
-	
-	
+	//new 	
 	private boolean newPowerUp;
-	private boolean newmovingPlat;
+	
 	
 	public GameStatus(){
 		
@@ -110,15 +108,7 @@ public class GameStatus {
 		this.newPowerUp = newPowerUp;
 		
 	}	
-//	
-//	public synchronized boolean isNewMovingPlatorms() {
-//		return newmovingPlat;
-//	}
-//	
-//	public void setNewMovingPlatforms(boolean newmovingPlat) {
-//		this.newmovingPlat = newmovingPlat;
-//	}
-	
+
 	
 	
 	/**

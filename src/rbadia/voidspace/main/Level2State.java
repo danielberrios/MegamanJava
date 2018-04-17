@@ -1,16 +1,10 @@
 package rbadia.voidspace.main;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import rbadia.voidspace.graphics.GraphicsManager;
-import rbadia.voidspace.model.Asteroid;
-import rbadia.voidspace.model.BigBullet;
-import rbadia.voidspace.model.Bullet;
 import rbadia.voidspace.model.Platform;
 import rbadia.voidspace.sounds.SoundManager;
 
