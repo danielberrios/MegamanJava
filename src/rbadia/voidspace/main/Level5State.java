@@ -65,6 +65,7 @@ public class Level5State extends Level4State {
 		drawFarmerBullets();
 		checkFarmerBulletsCollision();
 		checkFarmerManCollision();
+		drawPlatforms();
 		
 	}
 	
@@ -357,7 +358,16 @@ public class Level5State extends Level4State {
 		}
 		return platforms;
 	}
-
+	
+	@Override
+	protected void drawPlatforms() {
+		//draw platforms
+		Graphics2D g2d = getGraphics2D();
+		for(int i=0; i<getNumPlatforms(); i++){
+			getGraphicsManager().drawPlatform(platforms[i], g2d, this, i);
+		}
+	}
+	
 	//for background
 	protected void paintBackGround(Graphics farmbackground) {
 		super.paintComponent(farmbackground);

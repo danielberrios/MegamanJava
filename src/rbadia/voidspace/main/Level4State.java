@@ -4,13 +4,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import rbadia.voidspace.graphics.GraphicsManager;
 import rbadia.voidspace.model.Asteroid;
 import rbadia.voidspace.model.BigBullet;
-import rbadia.voidspace.model.Platform;
 import rbadia.voidspace.sounds.SoundManager;
 
 public class Level4State extends Level3State {
@@ -18,8 +15,8 @@ public class Level4State extends Level3State {
 	private static final long serialVersionUID = 1L;
 	protected Asteroid asteroidNum3;
 	protected long lastAsteroidTimeNum3;
-	
-	
+
+
 	public Level4State(int level, MainFrame frame, GameStatus status, LevelLogic gameLogic, InputHandler inputHandler,
 			GraphicsManager graphicsMan, SoundManager soundMan) {
 		super(level, frame, status, gameLogic, inputHandler, graphicsMan, soundMan);
@@ -30,32 +27,74 @@ public class Level4State extends Level3State {
 
 		}
 	}
-	
-	
+
+
+	@Override
+	public void updateScreen() {
+		Graphics2D g2d = getGraphics2D();
+		GameStatus status = this.getGameStatus();
+
+		// save original font - for later use
+		if(this.originalFont == null){
+			this.originalFont = g2d.getFont();
+			this.bigFont = originalFont;
+		}
+
+		clearScreen();
+		drawStars(50);
+		paintBackGround(g2d);
+		drawFloor();
+		drawPlatforms();
+		drawMegaMan();
+		drawAsteroid();			
+		drawBullets();
+		drawBigBullets();
+		checkBullletAsteroidCollisions();
+		checkBigBulletAsteroidCollisions();
+		checkMegaManAsteroidCollisions();
+		checkAsteroidFloorCollisions();
+		// new
+		drawPowerUp();
+		checkMegaManPowerCollisions();		
+
+		// update asteroids destroyed (score) label  
+		getMainFrame().getDestroyedValueLabel().setText(Long.toString(status.getAsteroidsDestroyed()));
+		// update lives left label
+		getMainFrame().getLivesValueLabel().setText(Integer.toString(status.getLivesLeft()));
+		//update level label
+		getMainFrame().getLevelValueLabel().setText(Long.toString(status.getLevel()));
+	}
+
+
+
 	@Override
 	public void doStart() {
 		super.doStart();			
 		thirdAsteroid(this);
 		lastAsteroidTimeNum3 = -NEW_ASTEROID_DELAY;
 		setStartState(GETTING_READY);
-		setCurrentState(getStartState());
+		setCurrentState(getStartState());		
 	}
-	
 
+	// I give credit to Gabriela Santiago for helping me figure out how to make the platforms appear in the screen
 	@Override
-	public Platform[] newPlatforms(int n){
-		platforms = new Platform[n];
-		for(int i=0; i<n; i++){
-			this.platforms[i] = new Platform(0,0);
-			if(i<4)	platforms[i].setLocation(50+ i*50, getHeight()/2 + 140 - i*40);
-			if(i==4) platforms[i].setLocation(50 +i*50, getHeight()/2 + 140 - 3*40);
-			if(i>4){	
-				int k=4;
-				platforms[i].setLocation(50 + i*50, getHeight()/2 + 20 + (i-k)*40 );
-				k=k+2;
+	protected void drawPlatforms() {
+		//draw platforms
+		Graphics2D g2d = getGraphics2D();
+		for(int i=0; i<getNumPlatforms(); i++){
+
+			if((platforms[i].getY() + platforms[i].height < megaMan.height + 85 )) {
+				platforms[i].setDirection() ;
 			}
+			else if((platforms[i].getY() + platforms[i].height > getWidth() - 150 )){
+				platforms[i].setDirection();
+			}
+			if(megaMan.getX() > platforms[i].getX() && megaMan.getX() < platforms[i].getX()+ platforms[i].width && megaMan.getY()+ megaMan.height == platforms[i].getY()){
+				megaMan.translate(0, platforms[i].getDirection());
+			}
+			platforms[i].translate(0, platforms[i].getDirection() );
+			getGraphicsManager().drawPlatform(platforms[i], g2d, this,i);			
 		}
-		return platforms;
 	}
 
 	public Asteroid thirdAsteroid(Level3State screen) {
@@ -63,10 +102,10 @@ public class Level4State extends Level3State {
 		int yPos = rand.nextInt((int)(screen.getHeight() - Asteroid.HEIGHT - 32));
 		asteroidNum3 = new Asteroid(xPos, yPos);
 		return asteroidNum3;
-		
+
 	}
-	
-	
+
+
 	@Override
 	protected void drawAsteroid() {
 		Graphics2D g2d = getGraphics2D();
@@ -106,7 +145,7 @@ public class Level4State extends Level3State {
 			}
 		}
 	}
-	
+
 	public void removeAsteroidNum3(Asteroid asteroid){		
 		Graphics2D g2d = getGraphics2D();
 		asteroidExplosion = new Rectangle(
@@ -121,7 +160,7 @@ public class Level4State extends Level3State {
 		// play asteroid explosion sound
 		this.getSoundManager().playAsteroidExplosionSound();
 	}
-	
+
 	@Override
 	protected void checkAsteroidFloorCollisions() {
 		for(int i=0; i<9; i++){
@@ -136,7 +175,7 @@ public class Level4State extends Level3State {
 			}
 		}
 	}
-	
+
 	@Override
 	protected void checkMegaManAsteroidCollisions() {
 		GameStatus status = getGameStatus();
@@ -153,7 +192,7 @@ public class Level4State extends Level3State {
 			removeAsteroidNum3(asteroidNum3);
 		}
 	}
-	
+
 	@Override
 	protected void checkBigBulletAsteroidCollisions() {
 		GameStatus status = getGameStatus();
@@ -179,12 +218,12 @@ public class Level4State extends Level3State {
 			}
 		}
 	}
-	
+
 	protected void paintBackGround(Graphics sheep) {
 		super.paintComponent(sheep);
 		sheep.drawImage(imgNew, 0, 0, this);
 	}
-	
+
 	@Override
 	public boolean isLevelWon() {
 		return levelAsteroidsDestroyed >= 12  || this.getInputHandler().isNPressed();

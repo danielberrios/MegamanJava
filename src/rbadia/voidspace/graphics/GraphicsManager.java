@@ -65,8 +65,7 @@ public class GraphicsManager {
 			this.megaFireLImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaFireLeft.png"));
 			this.reversemegaManImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/reversemegaMan3.png"));
 			this.powerUpImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/powerUp.png"));
-			this.farmerImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/farmer.png"));
-			
+			this.farmerImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/farmer.png"));	
 			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "The graphic files are either corrupt or missing.",
@@ -119,10 +118,6 @@ public class GraphicsManager {
 			g2d.drawImage(platformImg, platform.x , platform.y, observer);	
 	}
 	
-	public void drawPlatform2 (Platform platform, Graphics2D g2d, ImageObserver observer, int i){
-		g2d.drawImage(platformImg, platform.x , platform.y, observer);	
-}
-
 	/**
 	 * Draws a bullet image to the specified graphics canvas.
 	 * @param bullet the bullet to draw

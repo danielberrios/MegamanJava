@@ -1,11 +1,15 @@
 package rbadia.voidspace.main;
 
 import java.awt.Color;
+
 import java.awt.Font;
 import java.awt.FontMetrics;
+
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -21,6 +25,10 @@ import javax.swing.Timer;
  */
 public class LevelLogic {
 
+	/**
+	 * 
+	 */
+	
 	private long lastBulletTime;
 	private long lastExchangeTime;
 	private long lastBigBulletTime;
@@ -32,6 +40,8 @@ public class LevelLogic {
 	protected Font originalFont;
 	protected Font bigFont;
 	protected Font biggestFont;
+	
+	public BufferedImage imgNew;
 
 	/**
 	 * Create a new game logic handler
@@ -211,10 +221,10 @@ public class LevelLogic {
 	 * Display initial game title screen.
 	 */
 	protected void drawInitialMessage() {
-
+		
 		LevelState levelState = getLevelState();
 		Graphics2D g2d = levelState.getGraphics2D();
-
+	
 		if(this.originalFont == null){
 			this.originalFont = g2d.getFont();
 			this.bigFont = originalFont;
@@ -246,28 +256,28 @@ public class LevelLogic {
 		strWidth = fm.stringWidth(newGameStr);
 		strX = (levelState.getWidth() - strWidth)/2;
 		strY = (levelState.getHeight() + fm.getAscent())/2 + ascent + 16;
-		g2d.setPaint(Color.WHITE);
+		g2d.setPaint(Color.ORANGE);
 		g2d.drawString(newGameStr, strX, strY);
 
 		fm = g2d.getFontMetrics();
 		String itemGameStr = "Press <I> for Item Menu.";
 		strWidth = fm.stringWidth(itemGameStr);
 		strX = (levelState.getWidth() - strWidth)/2;
-		strY = strY + 16;
+		strY = strY + 16;		
 		g2d.drawString(itemGameStr, strX, strY);
 
 		fm = g2d.getFontMetrics();
 		String shopGameStr = "Press <S> for Shop Menu.";
 		strWidth = fm.stringWidth(shopGameStr);
 		strX = (levelState.getWidth() - strWidth)/2;
-		strY = strY + 16;
+		strY = strY + 16;		
 		g2d.drawString(shopGameStr, strX, strY);
 
 		fm = g2d.getFontMetrics();
 		String exitGameStr = "Press <Esc> to Exit the Game.";
 		strWidth = fm.stringWidth(exitGameStr);
 		strX = (levelState.getWidth() - strWidth)/2;
-		strY = strY + 16;
+		strY = strY + 16;		
 		g2d.drawString(exitGameStr, strX, strY);
 	}
 
@@ -290,7 +300,7 @@ public class LevelLogic {
 		int strWidth = fm.stringWidth(readyStr);
 		int strX = (levelState.getWidth() - strWidth)/2;
 		int strY = (levelState.getHeight() + ascent)/2;
-		g2d.setPaint(Color.WHITE);
+		g2d.setPaint(Color.ORANGE);
 		g2d.drawString(readyStr, strX, strY);
 	}
 
@@ -304,7 +314,7 @@ public class LevelLogic {
 			break;
 
 		case LevelState.INITIAL_SCREEN:
-			levelState.doInitialScreen();
+			levelState.doInitialScreen();		
 			handleKeysDuringInitialScreen(ih, levelState);
 			break;
 
@@ -452,4 +462,5 @@ public class LevelLogic {
 			e.printStackTrace();
 		}
 	}
+			
 }
